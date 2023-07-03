@@ -3,7 +3,7 @@ info:
   title: School System API
   description: API for managing books, teachers, and more in a school system
   version: 1.0.0
-  contact: {} 
+  contact: {}
 
 servers:
   - url: https://api.example.com
@@ -96,7 +96,7 @@ paths:
       responses:
         '204':
           description: No Content
-#---------------------------------------------------
+
   /teachers:
     get:
       summary: Get a list of teachers
@@ -178,6 +178,94 @@ paths:
         - name: teacherId
           in: path
           description: ID of the teacher
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
+  /students:
+    get:
+      summary: Get a list of students
+      operationId: getStudentList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+
+    post:
+      summary: Add a new student
+      operationId: addStudent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+  /students/{studentId}:
+    get:
+      summary: Get details regarding a specific student
+      operationId: getStudentDetails
+      parameters:
+        - name: studentId
+          in: path
+          description: Personal ID of a Student
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+    patch:
+      summary: Update details of a specific Student
+      operationId: updateStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: Personal ID of a Student
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+    delete:
+      summary: Delete a specific Student
+      operationId: deleteStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: Personal ID of a Student
           required: true
           schema:
             type: string
@@ -301,7 +389,7 @@ components:
     Student:
       type: object
       properties:
-        name: 
+        name:
           type: string
         studentId:
           type: string
@@ -314,10 +402,11 @@ components:
           type: string
         major:
           type: string
+
     StudentInput:
       type: object
       properties:
-        name: 
+        name:
           type: string
         studentId:
           type: string
@@ -330,10 +419,11 @@ components:
           type: string
         major:
           type: string
+
     StudentUpdate:
       type: object
       properties:
-        name: 
+        name:
           type: string
         studentId:
           type: string
@@ -345,90 +435,4 @@ components:
         department:
           type: string
         major:
-          type: string    
-#--------------------------------
- 
-  /students:
-    get:
-      summary: "Get a list of students"
-      operationId: getStudentList
-      responses: 
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Student'
-    post:
-      summary: "Add a new student"
-      operationId: addStudent 
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/StudentInput'
-      responses:
-        '201':
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Student'
-
-  /students/{studentId}:
-    get:
-      summary: Get details regarding a specific student
-      operationId: getStudentDetails
-      parameters:
-        name: bookId
-        in: path
-        description: Personal ID of a Student
-        required: true
-        schema:
           type: string
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#components/schemas/Student'
-    patch:
-      summary: Update details of a specific Student
-      operationId: updateStudent
-      parameters:
-        - name: studentId
-          in: path
-          description: Personal ID of a Student
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#components/schemas/StudentUpdate'
-      responses:
-        '200': 
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#components/schemas/Student'
-    delete:
-      summary: Delete a specific Student
-      operationId: deleteStudent
-      parameters:
-        - name: studentId
-          in: path
-          description: Personal ID of a Student
-          required: true
-          schema:
-            type: string
-            responses:
-              '204':
-                description: "No content"                                                                          
