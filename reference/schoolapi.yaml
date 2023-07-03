@@ -4,7 +4,8 @@ x-stoplight:
 info:
   title: schoolapi
   version: '1.0'
-  description: |-
+  description: |
+    An API Specification which treats the following cases:
     * Books
         * Name
         * Genre
@@ -39,6 +40,16 @@ info:
         * Name
         * Faculty
         * Department
+      
+    General Description: 
+      An API for a hypothetical School System which also includes the execution of CRUD Operations:
+      Operations included are:
+    * Getting list of items
+    * Getting single item in greater detail
+    * Adding a single item
+    * Updating a single item (partial update only)
+    * Deleting a single item
+    * Deleting a group of items
 servers:
   - url: 'http://localhost:3000'
 paths:
