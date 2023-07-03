@@ -1,235 +1,434 @@
 openapi: 3.1.0
-x-stoplight:
-  id: r4h8csevbzc2r
 info:
-  title: schoolapi
-  version: '1.0'
-  description: |
-    An API Specification which treats the following cases:
-    * Books
-        * Name
-        * Genre
-        * Author
-        * Publisher
-        * Date of publish
-        * ISBN
-    * Teachers
-        * Name
-        * Subjects
-        * Classes
-        * Main class(klasa ne kujdestari)
-        * Faculty
-        * Department
-    * Students
-        * Name
-        * Student ID
-        * Year
-        * Faculty
-        * Department
-        * Major
-    * Major
-        * Name
-        * Faculty
-        * Department
-        * Number of teachers
-        * Teachers
-    * Subjects
-        * Name
-        * Number of teachers
-    * Clubs
-        * Name
-        * Faculty
-        * Department
-      
-    General Description: 
-      An API for a hypothetical School System which also includes the execution of CRUD Operations:
-      Operations included are:
-    * Getting list of items
-    * Getting single item in greater detail
-    * Adding a single item
-    * Updating a single item (partial update only)
-    * Deleting a single item
-    * Deleting a group of items
+  title: School System API
+  description: API for managing books, teachers, and more in a school system
+  version: 1.0.0
+  contact: {} 
+
 servers:
-  - url: 'http://localhost:3000'
+  - url: https://api.example.com
+
 paths:
-  '/users/{userId}':
-    parameters:
-      - schema:
-          type: integer
-        name: userId
-        in: path
-        required: true
-        description: Id of an existing user.
+  /books:
     get:
-      summary: Get User Info by User ID
-      tags: []
+      summary: Get a list of books
+      operationId: getBookList
       responses:
         '200':
-          description: User Found
+          description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                Get User Alice Smith:
-                  value:
-                    id: 142
-                    firstName: Alice
-                    lastName: Smith
-                    email: alice.smith@gmail.com
-                    dateOfBirth: '1997-10-31'
-                    emailVerified: true
-                    signUpDate: '2019-08-24'
-        '404':
-          description: User Not Found
-      operationId: get-users-userId
-      description: Retrieve the information of the user with the matching user ID.
-    patch:
-      summary: Update User Information
-      operationId: patch-users-userId
-      responses:
-        '200':
-          description: User Updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                Updated User Rebecca Baker:
-                  value:
-                    id: 13
-                    firstName: Rebecca
-                    lastName: Baker
-                    email: rebecca@gmail.com
-                    dateOfBirth: '1985-10-02'
-                    emailVerified: false
-                    createDate: '2019-08-24'
-        '404':
-          description: User Not Found
-        '409':
-          description: Email Already Taken
-      description: Update the information of an existing user.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                  description: 'If a new email is given, the user''s email verified property will be set to false.'
-                dateOfBirth:
-                  type: string
-            examples:
-              Update First Name:
-                value:
-                  firstName: Rebecca
-              Update Email:
-                value:
-                  email: rebecca@gmail.com
-              Update Last Name & Date of Birth:
-                value:
-                  lastName: Baker
-                  dateOfBirth: '1985-10-02'
-        description: Patch user properties to update.
-  /user:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
     post:
-      summary: Create New User
-      operationId: post-user
-      responses:
-        '200':
-          description: User Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                New User Bob Fellow:
-                  value:
-                    id: 12
-                    firstName: Bob
-                    lastName: Fellow
-                    email: bob.fellow@gmail.com
-                    dateOfBirth: '1996-08-24'
-                    emailVerified: false
-                    createDate: '2020-11-18'
-        '400':
-          description: Missing Required Information
-        '409':
-          description: Email Already Taken
+      summary: Add a new book
+      operationId: addBook
       requestBody:
+        required: true
         content:
           application/json:
             schema:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                email:
-                  type: string
-                dateOfBirth:
-                  type: string
-                  format: date
-              required:
-                - firstName
-                - lastName
-                - email
-                - dateOfBirth
-            examples:
-              Create User Bob Fellow:
-                value:
-                  firstName: Bob
-                  lastName: Fellow
-                  email: bob.fellow@gmail.com
-                  dateOfBirth: '1996-08-24'
-        description: Post the necessary fields for the API to create a new user.
-      description: Create a new user.
+              $ref: '#/components/schemas/BookInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+  /books/{bookId}:
+    get:
+      summary: Get details of a specific book
+      operationId: getBookDetails
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+    patch:
+      summary: Update details of a specific book
+      operationId: updateBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BookUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Book'
+
+    delete:
+      summary: Delete a specific book
+      operationId: deleteBook
+      parameters:
+        - name: bookId
+          in: path
+          description: ID of the book
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+#---------------------------------------------------
+  /teachers:
+    get:
+      summary: Get a list of teachers
+      operationId: getTeacherList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Teacher'
+
+    post:
+      summary: Add a new teacher
+      operationId: addTeacher
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+
+  /teachers/{teacherId}:
+    get:
+      summary: Get details of a specific teacher
+      operationId: getTeacherDetails
+      parameters:
+        - name: teacherId
+          in: path
+          description: ID of the teacher
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+
+    patch:
+      summary: Update details of a specific teacher
+      operationId: updateTeacher
+      parameters:
+        - name: teacherId
+          in: path
+          description: ID of the teacher
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TeacherUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Teacher'
+
+    delete:
+      summary: Delete a specific teacher
+      operationId: deleteTeacher
+      parameters:
+        - name: teacherId
+          in: path
+          description: ID of the teacher
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No Content
+
 components:
   schemas:
-    User:
-      title: User
+    Book:
       type: object
-      description: ''
-      examples:
-        - id: 142
-          firstName: Alice
-          lastName: Smith
-          email: alice.smith@gmail.com
-          dateOfBirth: '1997-10-31'
-          emailVerified: true
-          signUpDate: '2019-08-24'
       properties:
-        id:
-          type: integer
-          description: Unique identifier for the given user.
-        firstName:
+        name:
           type: string
-        lastName:
+        genre:
           type: string
-        email:
+        author:
           type: string
-          format: email
-        dateOfBirth:
+        publisher:
+          type: string
+        dateOfPublish:
           type: string
           format: date
-          example: '1997-10-31'
-        emailVerified:
-          type: boolean
-          description: Set to true if the user's email has been verified.
-        createDate:
+        isbn:
+          type: string
+
+    BookInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: The Great Gatsby
+        genre:
+          type: string
+          example: Fiction
+        author:
+          type: string
+          example: F. Scott Fitzgerald
+        publisher:
+          type: string
+          example: Scribner
+        dateOfPublish:
           type: string
           format: date
-          description: The date that the user was created.
-      required:
-        - id
-        - firstName
-        - lastName
-        - email
-        - emailVerified
+          example: 1925-04-10
+        isbn:
+          type: string
+          example: "9780743273565"
+
+    BookUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        genre:
+          type: string
+        author:
+          type: string
+        publisher:
+          type: string
+        dateOfPublish:
+          type: string
+          format: date
+        isbn:
+          type: string
+
+    Teacher:
+      type: object
+      properties:
+        name:
+          type: string
+        subjects:
+          type: string
+        classes:
+          type: string
+        mainClass:
+          type: string
+        faculty:
+          type: string
+        department:
+          type: string
+
+    TeacherInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "John"
+        subjects:
+          type: string
+          example: "Maths"
+        classes:
+          type: string
+          example: "4-B, 4-A"
+        mainClass:
+          type: string
+          example: "4-C"
+        faculty:
+          type: string
+          example: "Natural Sciences"
+        department:
+          type: string
+          example: "Discrete Maths"
+
+    TeacherUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        subjects:
+          type: string
+        classes:
+          type: string
+        mainClass:
+          type: string
+        faculty:
+          type: string
+        department:
+          type: string
+
+    Student:
+      type: object
+      properties:
+        name: 
+          type: string
+        studentId:
+          type: string
+        year:
+          type: string
+          format: date
+        faculty:
+          type: string
+        department:
+          type: string
+        major:
+          type: string
+    StudentInput:
+      type: object
+      properties:
+        name: 
+          type: string
+        studentId:
+          type: string
+        year:
+          type: string
+          format: date
+        faculty:
+          type: string
+        department:
+          type: string
+        major:
+          type: string
+    StudentUpdate:
+      type: object
+      properties:
+        name: 
+          type: string
+        studentId:
+          type: string
+        year:
+          type: string
+          format: date
+        faculty:
+          type: string
+        department:
+          type: string
+        major:
+          type: string    
+#--------------------------------
+ 
+  /students:
+    get:
+      summary: "Get a list of students"
+      operationId: getStudentList
+      responses: 
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Student'
+    post:
+      summary: "Add a new student"
+      operationId: addStudent 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Student'
+
+  /students/{studentId}:
+    get:
+      summary: Get details regarding a specific student
+      operationId: getStudentDetails
+      parameters:
+        name: bookId
+        in: path
+        description: Personal ID of a Student
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Student'
+    patch:
+      summary: Update details of a specific Student
+      operationId: updateStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: Personal ID of a Student
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#components/schemas/StudentUpdate'
+      responses:
+        '200': 
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#components/schemas/Student'
+    delete:
+      summary: Delete a specific Student
+      operationId: deleteStudent
+      parameters:
+        - name: studentId
+          in: path
+          description: Personal ID of a Student
+          required: true
+          schema:
+            type: string
+            responses:
+              '204':
+                description: "No content"                                                                          
