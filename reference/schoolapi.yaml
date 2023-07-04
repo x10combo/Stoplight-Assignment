@@ -1,13 +1,11 @@
 openapi: 3.1.0
 info:
   title: School System API
-  description: API for managing books, teachers, and more in a school system
+  description: 'API for managing books, teachers, and more in a school system'
   version: 1.0.0
   contact: {}
-
 servers:
-  - url: https://api.example.com
-
+  - url: 'https://api.example.com'
 paths:
   /books:
     get:
@@ -22,7 +20,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Book'
-
     post:
       summary: Add a new book
       operationId: addBook
@@ -39,8 +36,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-
-  /books/{bookId}:
+  '/books/{bookId}':
     get:
       summary: Get details of a specific book
       operationId: getBookDetails
@@ -58,7 +54,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-
     patch:
       summary: Update details of a specific book
       operationId: updateBook
@@ -82,7 +77,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Book'
-
     delete:
       summary: Delete a specific book
       operationId: deleteBook
@@ -96,7 +90,6 @@ paths:
       responses:
         '204':
           description: No Content
-
   /teachers:
     get:
       summary: Get a list of teachers
@@ -110,7 +103,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Teacher'
-
     post:
       summary: Add a new teacher
       operationId: addTeacher
@@ -127,8 +119,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Teacher'
-
-  /teachers/{teacherId}:
+  '/teachers/{teacherId}':
     get:
       summary: Get details of a specific teacher
       operationId: getTeacherDetails
@@ -146,7 +137,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Teacher'
-
     patch:
       summary: Update details of a specific teacher
       operationId: updateTeacher
@@ -170,7 +160,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Teacher'
-
     delete:
       summary: Delete a specific teacher
       operationId: deleteTeacher
@@ -184,7 +173,6 @@ paths:
       responses:
         '204':
           description: No Content
-
   /students:
     get:
       summary: Get a list of students
@@ -198,7 +186,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Student'
-
     post:
       summary: Add a new student
       operationId: addStudent
@@ -215,8 +202,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
-
-  /students/{studentId}:
+  '/students/{studentId}':
     get:
       summary: Get details regarding a specific student
       operationId: getStudentDetails
@@ -234,7 +220,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
-
     patch:
       summary: Update details of a specific Student
       operationId: updateStudent
@@ -258,7 +243,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Student'
-
     delete:
       summary: Delete a specific Student
       operationId: deleteStudent
@@ -272,6 +256,96 @@ paths:
       responses:
         '204':
           description: No Content
+  /major:
+    get:
+      summary: Get a list of available majors
+      tags: []
+      operationId: getMajorList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Major'
+    post:
+      summary: Add a new major
+      operationId: addMajor
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MajorInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Major'
+
+  '/major/{majorId}':
+    get:
+      summary: Get details regarding a specific major
+      operationId: getMajorDetails
+      parameters:
+        - name: majorId
+          in: path
+          description: ID of a specific major
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Major'
+
+    patch:
+      summary: Update details of a specific Major
+      operationId: updateMajor
+      parameters:
+        - name: majorId
+        in: path
+        description: ID of a specific major
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref:  '#/components/schemas/MajorUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Major'
+    delete:
+      summary: Delete a specific Major
+      operationId: deleteMajor
+      parameters:
+        - name: majorId
+          in: path
+          description: ID of a specific major
+          required: true
+          schema:
+            type: string
+
+      responses:
+        '204':
+          description: No content
+
+
 
 components:
   schemas:
@@ -291,7 +365,6 @@ components:
           format: date
         isbn:
           type: string
-
     BookInput:
       type: object
       properties:
@@ -310,11 +383,10 @@ components:
         dateOfPublish:
           type: string
           format: date
-          example: 1925-04-10
+          example: '1925-04-10'
         isbn:
           type: string
-          example: "9780743273565"
-
+          example: '9780743273565'
     BookUpdate:
       type: object
       properties:
@@ -331,7 +403,6 @@ components:
           format: date
         isbn:
           type: string
-
     Teacher:
       type: object
       properties:
@@ -347,29 +418,27 @@ components:
           type: string
         department:
           type: string
-
     TeacherInput:
       type: object
       properties:
         name:
           type: string
-          example: "John"
+          example: John
         subjects:
           type: string
-          example: "Maths"
+          example: Maths
         classes:
           type: string
-          example: "4-B, 4-A"
+          example: '4-B, 4-A'
         mainClass:
           type: string
-          example: "4-C"
+          example: 4-C
         faculty:
           type: string
-          example: "Natural Sciences"
+          example: Natural Sciences
         department:
           type: string
-          example: "Discrete Maths"
-
+          example: Discrete Maths
     TeacherUpdate:
       type: object
       properties:
@@ -378,14 +447,13 @@ components:
         subjects:
           type: string
         classes:
-          type: string
+          type: array
         mainClass:
           type: string
         faculty:
           type: string
         department:
           type: string
-
     Student:
       type: object
       properties:
@@ -402,7 +470,6 @@ components:
           type: string
         major:
           type: string
-
     StudentInput:
       type: object
       properties:
@@ -419,7 +486,6 @@ components:
           type: string
         major:
           type: string
-
     StudentUpdate:
       type: object
       properties:
@@ -436,3 +502,60 @@ components:
           type: string
         major:
           type: string
+    Major:
+      type: object
+      properties:
+        name:
+          type: string
+        faculty:
+          type: string
+        noTeachers:
+          type: integer
+        teachers:
+          type: array
+    MajorUpdate:    
+      type: object
+      properties:
+        name:
+          type: string
+        faculty:
+          type: string
+        noTeachers:
+          type: integer
+        teachers:
+          type: array
+    MajorInput:
+      type: object
+      properties:
+        name:
+          type: string
+        faculty:
+          type: string
+        noTeachers:
+          type: integer
+        teachers:
+          type: array
+    Subject:
+      type: object
+      properties:
+        name:
+          type: string
+        noTeachers:
+          type: integer
+    SubjectInput:
+      type: object
+      properties:
+        name:
+          type: string
+        noTeachers:
+          type: integer
+    SubjectUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+        noTeachers:
+          type: integer
+
+
+
