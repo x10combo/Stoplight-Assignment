@@ -748,4 +748,4 @@ components:
         faculty:
           type: string
         department:
-          type: string
+          type: string 
