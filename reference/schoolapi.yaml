@@ -286,7 +286,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Major'
-
   '/major/{majorId}':
     get:
       summary: Get details regarding a specific major
@@ -298,7 +297,6 @@ paths:
           required: true
           schema:
             type: string
-
       responses:
         '200':
           description: OK
@@ -306,7 +304,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Major'
-
     patch:
       summary: Update details of a specific Major
       operationId: updateMajor
@@ -322,7 +319,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref:  '#/components/schemas/MajorUpdate'
+              $ref: '#/components/schemas/MajorUpdate'
       responses:
         '200':
           description: OK
@@ -340,12 +337,181 @@ paths:
           required: true
           schema:
             type: string
+      responses:
+        '204':
+          description: No content
+  /subjects:
+    get:
+      summary: Get a list of available subjects
+      tags: []
+      operationId: getSubjectList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Subject'
+    post:
+      summary: Add a new subject
+      operationId: addSubject
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+  '/subject/{subjectId}':
+    get:
+      summary: Get details regarding a specific subject
+      operationId: getSubjecctDetails
+      parameters:
+        - name: subjectId
+          in: path
+          description: ID of a specific subject
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+    patch:
+      summary: Update details of a specific Subject
+      operationId: updateSubject
+      parameters:
+        - name: subjectId
+          in: path
+          description: ID of a specific subject
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SubjectUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Subject'
+    delete:
+      summary: Delete a specific Subject
+      operationId: deleteSubject
+      parameters:
+        - name: subjectId
+          in: path
+          description: ID of a specific subject
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: No content
 
+  /clubs:
+    get:
+      summary: Get a list of available clubs
+      tags: []
+      operationId: getClubList
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Club'
+    post:
+      summary: Add a new club
+      operationId: addClub
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClubInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+  '/club/{clubId}':
+    get:
+      summary: Get details regarding a specific club
+      operationId: getClubDetails
+      parameters:
+        - name: clubId
+          in: path
+          description: ID of a specific club
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+    patch:
+      summary: Update details of a specific Club
+      operationId: updateClub
+      parameters:
+        - name: clubId
+          in: path
+          description: ID of a specific club
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClubUpdate'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Club'
+    delete:
+      summary: Delete a specific Club
+      operationId: deleteClub
+      parameters:
+        - name: clubId
+          in: path
+          description: ID of a specific club
+          required: true
+          schema:
+            type: string
       responses:
         '204':
           description: No content
 
 
+#------------------------
 
 components:
   schemas:
@@ -513,7 +679,7 @@ components:
           type: integer
         teachers:
           type: array
-    MajorUpdate:    
+    MajorUpdate:
       type: object
       properties:
         name:
@@ -556,28 +722,30 @@ components:
           type: string
         noTeachers:
           type: integer
-
     Club:
       type: object
       properties:
         name:
           type: string
-        noTeachers:
-          type: integer
+        faculty:
+          type: string
+        department:
+          type: string
     ClubInput:
       type: object
       properties:
         name:
           type: string
-        noTeachers:
-          type: integer
+        faculty:
+          type: string
+        department:
+          type: string
     ClubUpdate:
       type: object
       properties:
         name:
           type: string
-        noTeachers:
-          type: integer
-
-
-
+        faculty:
+          type: string
+        department:
+          type: string
