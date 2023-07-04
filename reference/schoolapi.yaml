@@ -502,7 +502,7 @@ paths:
       parameters:
         - name: clubId
           in: path
-          description: ID of a specific club
+          description: ID of a specific Club
           required: true
           schema:
             type: string
